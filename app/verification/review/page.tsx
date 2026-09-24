@@ -15,8 +15,6 @@ const router = useRouter();
 
 const {
 
-cart,
-
 period,
 
 startDate,
@@ -29,11 +27,13 @@ documentImage,
 
 drivingLicenseImage,
 
-setUnlockCodes,
+setOrderId,
 
-setOrderId
+setBookingStatus
+
 
 }=useBooking();
+
 
 
 
@@ -51,60 +51,25 @@ Date.now().toString().slice(-8);
 
 
 
-const codes:any[] = [];
-
-
-
-cart.forEach(item=>{
-
-
-for(let i=1; i<=item.quantity; i++){
-
-
-codes.push({
-
-id:
-`${item.id}-${i}`,
-
-
-name:
-`${item.name} #${i}`,
-
-
-code:
-Math.floor(
-100000 + Math.random()*900000
-)
-.toString()
-
-
-});
-
-
-}
-
-
-});
-
-
-
-
-
-
-setUnlockCodes(codes);
-
-
 setOrderId(newOrderId);
 
 
 
+setBookingStatus(
+"Pending Verification"
+);
+
+
+
+
 router.push(
-"/booking/success"
+"/booking/pending"
 );
 
 
 
 }
+
 
 
 
@@ -151,6 +116,7 @@ Review Information
 
 
 
+
 <p className="
 mt-3
 text-gray-600
@@ -167,11 +133,12 @@ Please check your information before confirmation
 
 
 
-
 <div className="
 mt-6
 space-y-6
 ">
+
+
 
 
 
@@ -366,7 +333,6 @@ object-contain
 
 )
 
-
 }
 
 
@@ -385,6 +351,8 @@ font-bold
 Ready for Confirmation
 
 </p>
+
+
 
 
 

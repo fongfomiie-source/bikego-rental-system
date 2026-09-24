@@ -97,7 +97,9 @@ type BookingContextType = {
 
   setUnlockCodes:(codes:UnlockCode[])=>void;
 
+  bookingStatus:string;
 
+  setBookingStatus:(status:string)=>void;
 
   clearBooking:()=>void;
 
@@ -183,7 +185,8 @@ useState("");
 const [unlockCodes,setUnlockCodes] =
 useState<UnlockCode[]>([]);
 
-
+const [bookingStatus,setBookingStatus] =
+useState("Pending Verification");
 
 
 
@@ -212,6 +215,7 @@ setDrivingLicenseImage("");
 
 setUnlockCodes([]);
 
+setBookingStatus("Pending Verification");
 
 }
 
@@ -475,6 +479,10 @@ unlockCodes,
 
 setUnlockCodes,
 
+
+bookingStatus,
+
+setBookingStatus,
 
 
 clearBooking,

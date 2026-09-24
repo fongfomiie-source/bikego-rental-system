@@ -167,7 +167,15 @@ Rental Period:
 
 <b>
 {" "}
-{period}
+{
+period === "daily"
+? "Daily"
+: period === "threeDay"
+? "3 Days"
+: period === "weekly"
+? "Weekly"
+: "Monthly"
+}
 </b>
 
 </p>
