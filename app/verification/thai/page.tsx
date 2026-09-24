@@ -185,6 +185,8 @@ setDocumentImage(
 preview
 );
 
+
+
 setDrivingLicenseImage(
 licensePreview
 );

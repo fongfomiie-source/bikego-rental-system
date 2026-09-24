@@ -29,13 +29,12 @@ documentImage,
 
 drivingLicenseImage,
 
-setUnlockCodes
+setUnlockCodes,
 
+setOrderId
 
 }=useBooking();
 
-console.log("REVIEW DOCUMENT IMAGE", documentImage);
-console.log("REVIEW LICENSE IMAGE", drivingLicenseImage);
 
 
 
@@ -45,7 +44,15 @@ function handleConfirm(){
 
 
 
+const newOrderId =
+"BG-" +
+Date.now().toString().slice(-8);
+
+
+
+
 const codes:any[] = [];
+
 
 
 cart.forEach(item=>{
@@ -58,6 +65,7 @@ codes.push({
 
 id:
 `${item.id}-${i}`,
+
 
 name:
 `${item.name} #${i}`,
@@ -82,15 +90,21 @@ Math.floor(
 
 
 
+
 setUnlockCodes(codes);
 
 
+setOrderId(newOrderId);
 
-router.push("/booking/success");
+
+
+router.push(
+"/booking/success"
+);
+
 
 
 }
-
 
 
 
@@ -118,6 +132,8 @@ rounded-2xl
 shadow-lg
 p-8
 ">
+
+
 
 
 
@@ -150,9 +166,11 @@ Please check your information before confirmation
 
 
 
+
+
 <div className="
 mt-6
-space-y-5
+space-y-6
 ">
 
 
@@ -160,17 +178,26 @@ space-y-5
 
 
 
+
 <div>
 
 <p className="text-gray-500">
+
 Rental Period
+
 </p>
 
+
 <p className="font-bold">
+
 {period}
+
 </p>
 
+
 </div>
+
+
 
 
 
@@ -181,14 +208,21 @@ Rental Period
 <div>
 
 <p className="text-gray-500">
+
 Start Date
+
 </p>
 
+
 <p className="font-bold">
+
 {startDate}
+
 </p>
 
+
 </div>
+
 
 
 
@@ -200,14 +234,22 @@ Start Date
 <div>
 
 <p className="text-gray-500">
+
 Customer Type
+
 </p>
+
 
 <p className="font-bold">
+
 {customerType}
+
 </p>
 
+
 </div>
+
+
 
 
 
@@ -218,48 +260,65 @@ Customer Type
 <div>
 
 <p className="text-gray-500">
+
 Document Type
+
 </p>
 
+
 <p className="font-bold">
+
 {documentType}
+
 </p>
+
 
 </div>
 
 
 
+
+
+
+
+
+
+<div>
+
+
+<p className="text-gray-500 mb-2">
+
+National ID / Passport
+
+</p>
 
 
 
 
 
 {
+
 documentImage &&
-
-<div>
-
-<p className="text-gray-500">
-National ID / Passport
-</p>
-
 
 <img
 
 src={documentImage}
 
 className="
-mt-3
 rounded-xl
 max-h-60
 mx-auto
+object-contain
 "
 
 />
 
-</div>
 
 }
+
+
+
+</div>
 
 
 
@@ -270,13 +329,21 @@ mx-auto
 
 
 {
-drivingLicenseImage &&
+
+drivingLicenseImage && (
+
 
 <div>
 
-<p className="text-gray-500">
+
+<p className="text-gray-500 mb-2">
+
 Driving License
+
 </p>
+
+
+
 
 
 <img
@@ -284,15 +351,21 @@ Driving License
 src={drivingLicenseImage}
 
 className="
-mt-3
 rounded-xl
 max-h-60
 mx-auto
+object-contain
 "
 
 />
 
+
+
 </div>
+
+
+)
+
 
 }
 
@@ -303,23 +376,23 @@ mx-auto
 
 
 
-<div>
 
-<p className="text-green-600 font-bold">
+<p className="
+text-green-600
+font-bold
+">
 
 Ready for Confirmation
 
 </p>
 
-</div>
-
-
 
 
 
 
 
 </div>
+
 
 
 
@@ -339,11 +412,14 @@ bg-green-600
 text-white
 py-4
 rounded-full
+hover:bg-green-700
 "
 
 >
 
+
 Confirm Information
+
 
 </button>
 
@@ -351,7 +427,11 @@ Confirm Information
 
 
 
+
+
+
 </div>
+
 
 </main>
 
