@@ -87,9 +87,16 @@ type BookingContextType = {
 
 
 
+  drivingLicenseImage:string;
+
+  setDrivingLicenseImage:(image:string)=>void;
+
+
+
   unlockCodes:UnlockCode[];
 
   setUnlockCodes:(codes:UnlockCode[])=>void;
+
 
   clearBooking:()=>void;
 
@@ -99,8 +106,11 @@ type BookingContextType = {
 
 
 
+
 const BookingContext =
 createContext<BookingContextType | null>(null);
+
+
 
 
 
@@ -115,6 +125,8 @@ children,
 children:ReactNode;
 
 }){
+
+
 
 
 
@@ -158,10 +170,20 @@ useState("");
 
 
 
+const [drivingLicenseImage,setDrivingLicenseImage] =
+useState("");
+
+
+
 const [unlockCodes,setUnlockCodes] =
 useState<UnlockCode[]>([]);
 
+
+
+
+
 function clearBooking(){
+
 
 setCart([]);
 
@@ -179,9 +201,15 @@ setDocumentType("");
 
 setDocumentImage("");
 
+setDrivingLicenseImage("");
+
 setUnlockCodes([]);
 
+
 }
+
+
+
 
 
 
@@ -199,10 +227,12 @@ item=>item.id===vehicle.id
 
 
 
+
 if(exist){
 
 
 return current.map(item=>
+
 
 item.id===vehicle.id
 
@@ -217,10 +247,12 @@ quantity:item.quantity+1
 
 item
 
+
 );
 
 
 }
+
 
 
 
@@ -246,6 +278,9 @@ quantity:1
 
 
 
+
+
+
 function removeFromCart(id:string){
 
 
@@ -264,12 +299,17 @@ item=>item.id!==id
 
 
 
+
+
+
 function increaseQuantity(id:string){
 
 
 setCart(current=>
 
+
 current.map(item=>
+
 
 item.id===id
 
@@ -284,7 +324,9 @@ quantity:item.quantity+1
 
 item
 
+
 )
+
 
 );
 
@@ -295,12 +337,18 @@ item
 
 
 
+
+
+
+
 function decreaseQuantity(id:string){
 
 
 setCart(current=>
 
+
 current.map(item=>
+
 
 item.id===id && item.quantity>1
 
@@ -315,7 +363,9 @@ quantity:item.quantity-1
 
 item
 
+
 )
+
 
 );
 
@@ -326,7 +376,13 @@ item
 
 
 
+
+
+
+
+
 return (
+
 
 <BookingContext.Provider
 
@@ -380,11 +436,18 @@ documentImage,
 setDocumentImage,
 
 
+drivingLicenseImage,
+
+setDrivingLicenseImage,
+
+
 unlockCodes,
 
 setUnlockCodes,
 
+
 clearBooking,
+
 
 }}
 
@@ -408,6 +471,8 @@ clearBooking,
 
 
 
+
+
 export function useBooking(){
 
 
@@ -418,11 +483,14 @@ useContext(BookingContext);
 
 if(!context){
 
+
 throw new Error(
 "useBooking must be used inside BookingProvider"
 );
 
+
 }
+
 
 
 return context;
