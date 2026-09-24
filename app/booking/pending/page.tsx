@@ -78,9 +78,7 @@ text-left
 <p>
 
 Booking ID:
-
 <b>
-{" "}
 {orderId || "-"}
 </b>
 
@@ -145,14 +143,12 @@ space-y-3
 
 
 <p>
-✅ Payment Slip Submitted
-</p>
-
-
-<p>
 ✅ Identity Document Submitted
 </p>
 
+<p>
+⏳ Payment Slip Submitted
+</p>
 
 <p>
 ⏳ Staff Verification in Progress
