@@ -9,7 +9,16 @@ export default function BikesPage() {
 
 
 const { cart, addToCart } = useBooking();
+const cartCount = cart.reduce(
+  (sum,item)=>sum + item.quantity,
+  0
+);
 
+
+const cartTotal = cart.reduce(
+  (sum,item)=>sum + (item.price * item.quantity),
+  0
+);
 console.log("CURRENT CART", cart);
 
 
@@ -31,7 +40,8 @@ console.log("CURRENT CART", cart);
 <Link
 href="/cart"
 className="
-block
+hidden
+md:block
 mb-8
 text-center
 bg-black
@@ -204,7 +214,52 @@ console.log("ADD", vehicle.name);
 
 
       ))}
+{
+cartCount > 0 && (
 
+<Link
+href="/cart"
+className="
+fixed
+bottom-5
+left-5
+right-5
+z-50
+md:hidden
+bg-green-600
+text-white
+rounded-full
+py-4
+px-6
+shadow-xl
+flex
+justify-between
+items-center
+"
+>
+
+<div>
+
+<p className="font-bold">
+🛒 View Cart
+</p>
+
+<p className="text-sm">
+{cartCount} vehicle(s)
+</p>
+
+</div>
+
+
+<p className="font-bold">
+{cartTotal} THB
+</p>
+
+
+</Link>
+
+)
+}
 
       </div>
 
