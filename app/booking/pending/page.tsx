@@ -11,8 +11,14 @@ export default function PendingPage(){
 
 const {
 orderId,
-bookingStatus
+bookingStatus,
+cart,
+period,
+startDate
 }=useBooking();
+
+
+
 
 
 
@@ -27,6 +33,7 @@ p-8
 ">
 
 
+
 <div className="
 max-w-xl
 mx-auto
@@ -36,6 +43,8 @@ shadow-lg
 p-8
 text-center
 ">
+
+
 
 
 
@@ -66,6 +75,10 @@ Thank you for your booking.
 
 
 
+
+
+
+
 <div className="
 mt-6
 bg-green-50
@@ -78,11 +91,14 @@ text-left
 <p>
 
 Booking ID:
+
 <b>
+{" "}
 {orderId || "-"}
 </b>
 
 </p>
+
 
 
 <p className="
@@ -113,6 +129,116 @@ font-bold
 
 
 
+
+
+{/* Booking Detail */}
+
+<div className="
+mt-6
+bg-white
+border
+rounded-xl
+p-5
+text-left
+">
+
+
+<h2 className="
+font-bold
+text-xl
+">
+
+Booking Detail
+
+</h2>
+
+
+
+<div className="
+mt-4
+space-y-2
+">
+
+
+<p>
+
+Vehicle:
+
+</p>
+
+
+{
+
+cart.map(item=>(
+
+
+<p
+
+key={item.id}
+
+className="
+font-bold
+text-green-700
+"
+
+>
+
+🏍️ {item.name}
+
+{" "}
+x{item.quantity}
+
+
+</p>
+
+
+))
+
+
+}
+
+
+
+
+<p>
+
+Rental Period:
+
+<b>
+{" "}
+{period}
+</b>
+
+</p>
+
+
+
+<p>
+
+Start Date:
+
+<b>
+{" "}
+{startDate}
+</b>
+
+</p>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
 <div className="
 mt-8
 text-left
@@ -127,6 +253,7 @@ text-xl
 Verification Process
 
 </h2>
+
 
 
 
@@ -146,13 +273,16 @@ space-y-3
 ✅ Identity Document Submitted
 </p>
 
+
 <p>
-⏳ Payment Slip Submitted
+⏳ Payment Verification Pending
 </p>
+
 
 <p>
 ⏳ Staff Verification in Progress
 </p>
+
 
 
 
@@ -186,6 +316,7 @@ Estimated Processing Time
 </p>
 
 
+
 <p className="
 mt-2
 text-green-700
@@ -205,6 +336,8 @@ Usually completed within 5–10 minutes during operating hours.
 
 
 
+
+
 <p className="
 mt-8
 text-gray-600
@@ -212,7 +345,16 @@ text-gray-600
 
 Your vehicle unlock code will be generated after approval.
 
+<br/>
+
+Please wait while our staff verifies your payment and documents.
+
+<br/>
+
+You can check your booking status after verification.
+
 </p>
+
 
 
 
@@ -248,6 +390,7 @@ Back to Home
 
 
 
+
 <Link
 
 href="/booking"
@@ -271,6 +414,7 @@ View Booking
 
 
 </div>
+
 
 
 
