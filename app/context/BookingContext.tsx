@@ -98,6 +98,7 @@ type BookingContextType = {
   setUnlockCodes:(codes:UnlockCode[])=>void;
 
 
+
   clearBooking:()=>void;
 
 
@@ -107,8 +108,12 @@ type BookingContextType = {
 
 
 
+
+
 const BookingContext =
 createContext<BookingContextType | null>(null);
+
+
 
 
 
@@ -182,6 +187,8 @@ useState<UnlockCode[]>([]);
 
 
 
+
+
 function clearBooking(){
 
 
@@ -214,6 +221,10 @@ setUnlockCodes([]);
 
 
 
+
+
+
+
 function addToCart(vehicle:CartItem){
 
 
@@ -224,6 +235,7 @@ const exist =
 current.find(
 item=>item.id===vehicle.id
 );
+
 
 
 
@@ -252,6 +264,7 @@ item
 
 
 }
+
 
 
 
@@ -302,6 +315,9 @@ item=>item.id!==id
 
 
 
+
+
+
 function increaseQuantity(id:string){
 
 
@@ -332,6 +348,8 @@ item
 
 
 }
+
+
 
 
 
@@ -381,6 +399,9 @@ item
 
 
 
+
+
+
 return (
 
 
@@ -401,9 +422,11 @@ increaseQuantity,
 decreaseQuantity,
 
 
+
 startDate,
 
 setStartDate,
+
 
 
 period,
@@ -411,9 +434,11 @@ period,
 setPeriod,
 
 
+
 orderId,
 
 setOrderId,
+
 
 
 paymentSlip,
@@ -421,9 +446,11 @@ paymentSlip,
 setPaymentSlip,
 
 
+
 customerType,
 
 setCustomerType,
+
 
 
 documentType,
@@ -431,9 +458,11 @@ documentType,
 setDocumentType,
 
 
+
 documentImage,
 
 setDocumentImage,
+
 
 
 drivingLicenseImage,
@@ -441,9 +470,11 @@ drivingLicenseImage,
 setDrivingLicenseImage,
 
 
+
 unlockCodes,
 
 setUnlockCodes,
+
 
 
 clearBooking,
@@ -465,6 +496,9 @@ clearBooking,
 
 
 }
+
+
+
 
 
 

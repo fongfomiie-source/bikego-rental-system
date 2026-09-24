@@ -36,6 +36,7 @@ item.type === "Motorbike" ||
 item.type === "Motorcycle"
 );
 console.log("VERIFY CART", cart);
+console.log("RAW CART", JSON.stringify(cart));
 console.log("HAS MOTORBIKE", hasMotorcycle);
 
 
@@ -184,20 +185,9 @@ setDocumentImage(
 preview
 );
 
-
-
-
-if(hasMotorcycle){
-
-
 setDrivingLicenseImage(
 licensePreview
 );
-
-
-}
-
-
 
 
 router.push(

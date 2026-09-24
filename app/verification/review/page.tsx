@@ -27,10 +27,14 @@ documentType,
 
 documentImage,
 
+drivingLicenseImage,
+
 setUnlockCodes
 
 
 }=useBooking();
+
+
 
 
 
@@ -91,13 +95,18 @@ router.push("/booking/success");
 
 
 
+
+
+
 return (
+
 
 <main className="
 min-h-screen
 bg-green-50
 p-8
 ">
+
 
 
 <div className="
@@ -110,6 +119,7 @@ p-8
 ">
 
 
+
 <h1 className="
 text-3xl
 font-bold
@@ -119,6 +129,8 @@ text-green-700
 Review Information
 
 </h1>
+
+
 
 
 
@@ -135,10 +147,15 @@ Please check your information before confirmation
 
 
 
+
+
 <div className="
 mt-6
 space-y-5
 ">
+
+
+
 
 
 
@@ -153,6 +170,9 @@ Rental Period
 </p>
 
 </div>
+
+
+
 
 
 
@@ -173,6 +193,9 @@ Start Date
 
 
 
+
+
+
 <div>
 
 <p className="text-gray-500">
@@ -184,6 +207,9 @@ Customer Type
 </p>
 
 </div>
+
+
+
 
 
 
@@ -204,15 +230,25 @@ Document Type
 
 
 
+
+
+
 {
 documentImage &&
+
+<div>
+
+<p className="text-gray-500">
+National ID / Passport
+</p>
+
 
 <img
 
 src={documentImage}
 
 className="
-mt-4
+mt-3
 rounded-xl
 max-h-60
 mx-auto
@@ -220,7 +256,48 @@ mx-auto
 
 />
 
+</div>
+
 }
+
+
+
+
+
+
+
+
+
+{
+drivingLicenseImage &&
+
+<div>
+
+<p className="text-gray-500">
+Driving License
+</p>
+
+
+<img
+
+src={drivingLicenseImage}
+
+className="
+mt-3
+rounded-xl
+max-h-60
+mx-auto
+"
+
+/>
+
+</div>
+
+}
+
+
+
+
 
 
 
@@ -237,7 +314,14 @@ Ready for Confirmation
 
 
 
+
+
+
+
 </div>
+
+
+
 
 
 
@@ -264,9 +348,12 @@ Confirm Information
 
 
 
+
+
 </div>
 
 </main>
+
 
 );
 
