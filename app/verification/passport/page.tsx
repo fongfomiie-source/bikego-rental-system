@@ -1,46 +1,198 @@
 "use client";
-import Link from "next/link";
+
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useBooking } from "../../context/BookingContext";
 
 
 export default function PassportVerification(){
 
 
-  const [file,setFile] = useState<File | null>(null);
-
-  const [preview,setPreview] = useState("");
-
-  const [error,setError] = useState("");
+const router = useRouter();
 
 
+const {
 
-  function handleFile(
-    e: React.ChangeEvent<HTMLInputElement>
-  ){
+cart,
 
-    const selected = e.target.files?.[0];
+setCustomerType,
+
+setDocumentType,
+
+setDocumentImage,
+
+setDrivingLicenseImage
 
 
-    if(selected){
+}=useBooking();
 
-      setFile(selected);
 
-      setPreview(
-        URL.createObjectURL(selected)
-      );
 
-      setError("");
+const hasMotorcycle = cart.some(
+(item)=>
+item.type === "Motorbike" ||
+item.type === "Motorcycle"
+);
 
-    }
+console.log("PASSPORT CART", cart);
+console.log("PASSPORT HAS MOTORBIKE", hasMotorcycle);
 
-  }
+const [file,setFile] =
+useState<File | null>(null);
+
+
+const [preview,setPreview] =
+useState("");
+
+
+const [licenseFile,setLicenseFile] =
+useState<File | null>(null);
+
+
+const [licensePreview,setLicensePreview] =
+useState("");
+
+
+const [error,setError] =
+useState("");
+
+
+
+
+
+
+function handleFile(
+e:React.ChangeEvent<HTMLInputElement>
+){
+
+
+const selected =
+e.target.files?.[0];
+
+
+if(selected){
+
+setFile(selected);
+
+setPreview(
+URL.createObjectURL(selected)
+);
+
+setError("");
+
+}
+
+}
+
+
+
+
+
+
+
+function handleLicenseFile(
+e:React.ChangeEvent<HTMLInputElement>
+){
+
+
+const selected =
+e.target.files?.[0];
+
+
+if(selected){
+
+setLicenseFile(selected);
+
+setLicensePreview(
+URL.createObjectURL(selected)
+);
+
+setError("");
+
+}
+
+}
+
+
+
+
+
+
+
+
+function handleContinue(){
+
+
+
+if(!file){
+
+setError(
+"Please upload your Passport"
+);
+
+return;
+
+}
+
+
+
+if(hasMotorcycle && !licenseFile){
+
+setError(
+"Please upload your Driving License"
+);
+
+return;
+
+}
+
+
+
+
+setCustomerType(
+"International Customer"
+);
+
+
+
+setDocumentType(
+"Passport"
+);
+
+
+
+setDocumentImage(
+preview
+);
+
+
+
+setDrivingLicenseImage(
+licensePreview
+);
+
+
+
+router.push(
+"/verification/review"
+);
+
+
+}
+
+
+
 
 
 
 
 return (
 
-<main className="min-h-screen bg-green-50 p-8">
+<main className="
+min-h-screen
+bg-green-50
+p-8
+">
 
 
 <div className="
@@ -58,7 +210,9 @@ text-3xl
 font-bold
 text-green-700
 ">
+
 International Customer Verification
+
 </h1>
 
 
@@ -67,7 +221,9 @@ International Customer Verification
 mt-3
 text-gray-600
 ">
+
 Please upload your Passport
+
 </p>
 
 
@@ -85,12 +241,13 @@ text-center
 
 
 {
+
 preview ?
 
-(
-
 <img
+
 src={preview}
+
 className="
 mx-auto
 max-h-60
@@ -98,27 +255,25 @@ max-w-full
 object-contain
 rounded-lg
 "
-/>
 
-)
+/>
 
 :
 
-(
-
-<div className="text-gray-400">
+<div className="
+text-gray-400
+">
 
 📷
 
 <p>
-Document Preview
+Passport Preview
 </p>
 
 </div>
 
-)
-
 }
+
 
 
 </div>
@@ -128,9 +283,13 @@ Document Preview
 
 
 <input
+
 type="file"
+
 accept="image/*"
+
 onChange={handleFile}
+
 className="
 mt-6
 w-full
@@ -138,73 +297,157 @@ border
 p-3
 rounded-lg
 "
+
 />
 
 
 
 
 
+
+
 {
-file &&
+
+hasMotorcycle && (
+
+<>
+
 
 <p className="
-mt-3
-text-sm
+mt-8
 text-gray-600
 ">
 
-Selected:
-<b> {file.name}</b>
+Please upload your Driving License
 
 </p>
 
-}
 
 
-
+<div className="
+mt-4
+border-2
+border-dashed
+rounded-xl
+p-6
+text-center
+">
 
 
 {
-error &&
 
-<p className="
-mt-3
-text-red-500
+licensePreview ?
+
+<img
+
+src={licensePreview}
+
+className="
+mx-auto
+max-h-60
+max-w-full
+object-contain
+rounded-lg
+"
+
+/>
+
+:
+
+<div className="
+text-gray-400
 ">
 
-{error}
+📷
 
+<p>
+Driving License Preview
 </p>
 
+</div>
+
 }
-
-
-
-
-
-
-<Link
-href="/verification/review?type=passport&document=Passport"
-className="
-mt-8
-block
-text-center
-w-full
-bg-green-600
-text-white
-py-4
-rounded-full
-hover:bg-green-700
-"
->
-Continue
-</Link>
-
 
 
 
 </div>
 
+
+
+
+<input
+
+type="file"
+
+accept="image/*"
+
+onChange={handleLicenseFile}
+
+className="
+mt-6
+w-full
+border
+p-3
+rounded-lg
+"
+
+/>
+
+
+</>
+
+)
+
+}
+
+
+
+
+
+
+{
+
+error &&
+
+<p className="
+mt-4
+text-red-500
+">
+
+⚠ {error}
+
+</p>
+
+}
+
+
+
+
+
+
+<button
+
+onClick={handleContinue}
+
+className="
+mt-8
+w-full
+bg-green-600
+text-white
+py-4
+rounded-full
+"
+
+>
+
+Continue
+
+</button>
+
+
+
+
+</div>
 
 </main>
 

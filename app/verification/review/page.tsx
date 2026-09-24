@@ -34,7 +34,8 @@ setUnlockCodes
 
 }=useBooking();
 
-
+console.log("REVIEW DOCUMENT IMAGE", documentImage);
+console.log("REVIEW LICENSE IMAGE", drivingLicenseImage);
 
 
 
