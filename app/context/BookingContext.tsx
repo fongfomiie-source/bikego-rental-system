@@ -8,534 +8,493 @@ import {
 } from "react";
 
 
-type CartItem = {
+/* =========================
+   Cart
+========================= */
 
+type CartItem = {
   id: string;
   name: string;
   type: string;
   price: number;
   quantity: number;
-
 };
 
 
+/* =========================
+   Unlock Code
+========================= */
 
 type UnlockCode = {
-
   id: string;
   name: string;
   code: string;
-
 };
 
 
+/* =========================
+   Booking Context
+========================= */
 
 type BookingContextType = {
 
+  /* Cart */
 
   cart: CartItem[];
 
-  addToCart:(vehicle:CartItem)=>void;
+  addToCart: (
+    vehicle: CartItem
+  ) => void;
 
-  removeFromCart:(id:string)=>void;
+  removeFromCart: (
+    id: string
+  ) => void;
 
-  increaseQuantity:(id:string)=>void;
+  increaseQuantity: (
+    id: string
+  ) => void;
 
-  decreaseQuantity:(id:string)=>void;
-
-
-
-  startDate:string;
-
-  setStartDate:(date:string)=>void;
-
-
-
-  period:string;
-
-  setPeriod:(period:string)=>void;
+  decreaseQuantity: (
+    id: string
+  ) => void;
 
 
+  /* Rental */
 
-  orderId:string;
+  startDate: string;
 
-  setOrderId:(id:string)=>void;
+  setStartDate: (
+    date: string
+  ) => void;
 
+  period: string;
 
-
-  paymentSlip:string;
-
-  setPaymentSlip:(image:string)=>void;
-
-
-
-  customerType:string;
-
-  setCustomerType:(type:string)=>void;
+  setPeriod: (
+    period: string
+  ) => void;
 
 
+  /* Booking */
 
-  documentType:string;
+  orderId: string;
 
-  setDocumentType:(type:string)=>void;
-
-
-
-  documentImage:string;
-
-  setDocumentImage:(image:string)=>void;
+  setOrderId: (
+    id: string
+  ) => void;
 
 
+  /* Payment */
 
-  drivingLicenseImage:string;
+  paymentSlip: string;
 
-  setDrivingLicenseImage:(image:string)=>void;
+  setPaymentSlip: (
+    image: string
+  ) => void;
 
 
+  /* Customer Information */
 
-  unlockCodes:UnlockCode[];
+  customerName: string;
 
-  setUnlockCodes:(codes:UnlockCode[])=>void;
+  setCustomerName: (
+    name: string
+  ) => void;
 
-  bookingStatus:string;
+  customerPhone: string;
 
-  setBookingStatus:(status:string)=>void;
+  setCustomerPhone: (
+    phone: string
+  ) => void;
 
-  clearBooking:()=>void;
+  customerType: string;
 
+  setCustomerType: (
+    type: string
+  ) => void;
+
+
+  /* Identity Verification */
+
+  documentType: string;
+
+  setDocumentType: (
+    type: string
+  ) => void;
+
+  documentImage: string;
+
+  setDocumentImage: (
+    image: string
+  ) => void;
+
+  drivingLicenseImage: string;
+
+  setDrivingLicenseImage: (
+    image: string
+  ) => void;
+
+
+  /* Unlock */
+
+  unlockCodes: UnlockCode[];
+
+  setUnlockCodes: (
+    codes: UnlockCode[]
+  ) => void;
+
+
+  /* Status */
+
+  bookingStatus: string;
+
+  setBookingStatus: (
+    status: string
+  ) => void;
+
+
+  /* Clear */
+
+  clearBooking: () => void;
 
 };
 
 
-
-
-
-
+/* =========================
+   Context
+========================= */
 
 const BookingContext =
-createContext<BookingContextType | null>(null);
+  createContext<BookingContextType | null>(
+    null
+  );
 
 
-
-
-
-
-
-
+/* =========================
+   Provider
+========================= */
 
 export function BookingProvider({
+  children,
+}: {
+  children: ReactNode;
+}) {
 
-children,
+  /* Cart */
 
-}:{
-
-children:ReactNode;
-
-}){
-
-
-
+  const [cart, setCart] =
+    useState<CartItem[]>([]);
 
 
-const [cart,setCart] =
-useState<CartItem[]>([]);
+  /* Rental */
+
+  const [startDate, setStartDate] =
+    useState("");
+
+  const [period, setPeriod] =
+    useState("daily");
 
 
+  /* Booking */
 
-const [startDate,setStartDate] =
-useState("");
-
-
-
-const [period,setPeriod] =
-useState("daily");
+  const [orderId, setOrderId] =
+    useState("");
 
 
+  /* Payment */
 
-const [orderId,setOrderId] =
-useState("");
-
-
-
-const [paymentSlip,setPaymentSlip] =
-useState("");
+  const [paymentSlip, setPaymentSlip] =
+    useState("");
 
 
+  /* Customer */
 
-const [customerType,setCustomerType] =
-useState("");
+  const [customerName, setCustomerName] =
+    useState("");
 
+  const [customerPhone, setCustomerPhone] =
+    useState("");
 
-
-const [documentType,setDocumentType] =
-useState("");
-
-
-
-const [documentImage,setDocumentImage] =
-useState("");
+  const [customerType, setCustomerType] =
+    useState("");
 
 
+  /* Identity */
 
-const [drivingLicenseImage,setDrivingLicenseImage] =
-useState("");
+  const [documentType, setDocumentType] =
+    useState("");
 
+  const [documentImage, setDocumentImage] =
+    useState("");
 
-
-const [unlockCodes,setUnlockCodes] =
-useState<UnlockCode[]>([]);
-
-const [bookingStatus,setBookingStatus] =
-useState("Pending Verification");
-
-
-
+  const [
+    drivingLicenseImage,
+    setDrivingLicenseImage,
+  ] = useState("");
 
 
-function clearBooking(){
+  /* Unlock Codes */
+
+  const [unlockCodes, setUnlockCodes] =
+    useState<UnlockCode[]>([]);
 
 
-setCart([]);
+  /* Booking Status */
 
-setStartDate("");
+  const [bookingStatus, setBookingStatus] =
+    useState(
+      "Pending Verification"
+    );
 
-setPeriod("daily");
 
-setOrderId("");
+  /* Clear Booking */
 
-setPaymentSlip("");
+  function clearBooking() {
 
-setCustomerType("");
+    setCart([]);
 
-setDocumentType("");
+    setStartDate("");
 
-setDocumentImage("");
+    setPeriod("daily");
 
-setDrivingLicenseImage("");
+    setOrderId("");
 
-setUnlockCodes([]);
+    setPaymentSlip("");
 
-setBookingStatus("Pending Verification");
+    setCustomerName("");
 
+    setCustomerPhone("");
+
+    setCustomerType("");
+
+    setDocumentType("");
+
+    setDocumentImage("");
+
+    setDrivingLicenseImage("");
+
+    setUnlockCodes([]);
+
+    setBookingStatus(
+      "Pending Verification"
+    );
+  }
+
+
+  /* Add To Cart */
+
+  function addToCart(
+    vehicle: CartItem
+  ) {
+
+    setCart((current) => {
+
+      const exist =
+        current.find(
+          (item) =>
+            item.id === vehicle.id
+        );
+
+
+      if (exist) {
+
+        return current.map(
+          (item) =>
+
+            item.id === vehicle.id
+
+              ? {
+                  ...item,
+                  quantity:
+                    item.quantity + 1,
+                }
+
+              : item
+        );
+      }
+
+
+      return [
+        ...current,
+
+        {
+          ...vehicle,
+          quantity: 1,
+        },
+      ];
+    });
+  }
+
+
+  /* Remove From Cart */
+
+  function removeFromCart(
+    id: string
+  ) {
+
+    setCart((current) =>
+      current.filter(
+        (item) =>
+          item.id !== id
+      )
+    );
+  }
+
+
+  /* Increase Quantity */
+
+  function increaseQuantity(
+    id: string
+  ) {
+
+    setCart((current) =>
+
+      current.map(
+        (item) =>
+
+          item.id === id
+
+            ? {
+                ...item,
+                quantity:
+                  item.quantity + 1,
+              }
+
+            : item
+      )
+    );
+  }
+
+
+  /* Decrease Quantity */
+
+  function decreaseQuantity(
+    id: string
+  ) {
+
+    setCart((current) =>
+
+      current.map(
+        (item) =>
+
+          item.id === id &&
+          item.quantity > 1
+
+            ? {
+                ...item,
+                quantity:
+                  item.quantity - 1,
+              }
+
+            : item
+      )
+    );
+  }
+
+
+  /* Provider */
+
+  return (
+
+    <BookingContext.Provider
+      value={{
+
+        cart,
+
+        addToCart,
+
+        removeFromCart,
+
+        increaseQuantity,
+
+        decreaseQuantity,
+
+
+        startDate,
+
+        setStartDate,
+
+        period,
+
+        setPeriod,
+
+
+        orderId,
+
+        setOrderId,
+
+
+        paymentSlip,
+
+        setPaymentSlip,
+
+
+        customerName,
+
+        setCustomerName,
+
+        customerPhone,
+
+        setCustomerPhone,
+
+        customerType,
+
+        setCustomerType,
+
+
+        documentType,
+
+        setDocumentType,
+
+        documentImage,
+
+        setDocumentImage,
+
+        drivingLicenseImage,
+
+        setDrivingLicenseImage,
+
+
+        unlockCodes,
+
+        setUnlockCodes,
+
+
+        bookingStatus,
+
+        setBookingStatus,
+
+
+        clearBooking,
+
+      }}
+    >
+
+      {children}
+
+    </BookingContext.Provider>
+  );
 }
 
 
+/* =========================
+   Hook
+========================= */
 
+export function useBooking() {
 
+  const context =
+    useContext(
+      BookingContext
+    );
 
 
+  if (!context) {
 
+    throw new Error(
+      "useBooking must be used inside BookingProvider"
+    );
+  }
 
 
-
-
-function addToCart(vehicle:CartItem){
-
-
-setCart(current=>{
-
-
-const exist =
-current.find(
-item=>item.id===vehicle.id
-);
-
-
-
-
-
-if(exist){
-
-
-return current.map(item=>
-
-
-item.id===vehicle.id
-
-?
-
-{
-...item,
-quantity:item.quantity+1
-}
-
-:
-
-item
-
-
-);
-
-
-}
-
-
-
-
-
-return [
-
-...current,
-
-{
-...vehicle,
-quantity:1
-}
-
-];
-
-
-});
-
-
-}
-
-
-
-
-
-
-
-
-
-function removeFromCart(id:string){
-
-
-setCart(current=>
-
-current.filter(
-item=>item.id!==id
-)
-
-);
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-function increaseQuantity(id:string){
-
-
-setCart(current=>
-
-
-current.map(item=>
-
-
-item.id===id
-
-?
-
-{
-...item,
-quantity:item.quantity+1
-}
-
-:
-
-item
-
-
-)
-
-
-);
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-function decreaseQuantity(id:string){
-
-
-setCart(current=>
-
-
-current.map(item=>
-
-
-item.id===id && item.quantity>1
-
-?
-
-{
-...item,
-quantity:item.quantity-1
-}
-
-:
-
-item
-
-
-)
-
-
-);
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-return (
-
-
-<BookingContext.Provider
-
-
-value={{
-
-
-cart,
-
-addToCart,
-
-removeFromCart,
-
-increaseQuantity,
-
-decreaseQuantity,
-
-
-
-startDate,
-
-setStartDate,
-
-
-
-period,
-
-setPeriod,
-
-
-
-orderId,
-
-setOrderId,
-
-
-
-paymentSlip,
-
-setPaymentSlip,
-
-
-
-customerType,
-
-setCustomerType,
-
-
-
-documentType,
-
-setDocumentType,
-
-
-
-documentImage,
-
-setDocumentImage,
-
-
-
-drivingLicenseImage,
-
-setDrivingLicenseImage,
-
-
-
-unlockCodes,
-
-setUnlockCodes,
-
-
-bookingStatus,
-
-setBookingStatus,
-
-
-clearBooking,
-
-
-}}
-
-
->
-
-
-{children}
-
-
-</BookingContext.Provider>
-
-
-);
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-export function useBooking(){
-
-
-const context =
-useContext(BookingContext);
-
-
-
-if(!context){
-
-
-throw new Error(
-"useBooking must be used inside BookingProvider"
-);
-
-
-}
-
-
-
-return context;
-
-
+  return context;
 }

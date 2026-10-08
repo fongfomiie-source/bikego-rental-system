@@ -9,7 +9,6 @@ export const vehicles = [
 
     requireLicense: false,
 
-
     prices: {
       daily: 50,
       threeDay: 130,
@@ -17,10 +16,8 @@ export const vehicles = [
       monthly: 1000,
     },
 
-
     description:
       "Comfort bicycle suitable for city sightseeing and short distance travel.",
-
 
     features: [
       "Light weight",
@@ -28,15 +25,26 @@ export const vehicles = [
       "Suitable for tourists",
     ],
 
-
     requirement:
       "No driving license required",
 
-
     status: "Available",
 
+    units: [
+      {
+        id: "HW-01",
+        status: "Available",
+      },
+      {
+        id: "HW-02",
+        status: "Available",
+      },
+      {
+        id: "HW-03",
+        status: "Available",
+      },
+    ],
   },
-
 
 
   {
@@ -48,7 +56,6 @@ export const vehicles = [
 
     requireLicense: false,
 
-
     prices: {
       daily: 80,
       threeDay: 210,
@@ -56,10 +63,8 @@ export const vehicles = [
       monthly: 1500,
     },
 
-
     description:
       "Mountain bicycle suitable for adventure and outdoor riding.",
-
 
     features: [
       "Strong frame",
@@ -67,15 +72,26 @@ export const vehicles = [
       "Comfortable riding",
     ],
 
-
     requirement:
       "No driving license required",
 
-
     status: "Available",
 
+    units: [
+      {
+        id: "MT-01",
+        status: "Available",
+      },
+      {
+        id: "MT-02",
+        status: "Available",
+      },
+      {
+        id: "MT-03",
+        status: "Available",
+      },
+    ],
   },
-
 
 
   {
@@ -87,7 +103,6 @@ export const vehicles = [
 
     requireLicense: true,
 
-
     prices: {
       daily: 250,
       threeDay: 700,
@@ -95,10 +110,8 @@ export const vehicles = [
       monthly: 3500,
     },
 
-
     description:
       "Automatic motorbike suitable for daily travel.",
-
 
     features: [
       "Automatic transmission",
@@ -106,15 +119,26 @@ export const vehicles = [
       "Easy to ride",
     ],
 
-
     requirement:
       "Valid motorcycle driving license required",
 
-
     status: "Available",
 
+    units: [
+      {
+        id: "110-01",
+        status: "Available",
+      },
+      {
+        id: "110-02",
+        status: "Available",
+      },
+      {
+        id: "110-03",
+        status: "Available",
+      },
+    ],
   },
-
 
 
   {
@@ -126,7 +150,6 @@ export const vehicles = [
 
     requireLicense: true,
 
-
     prices: {
       daily: 300,
       threeDay: 850,
@@ -134,10 +157,8 @@ export const vehicles = [
       monthly: 4000,
     },
 
-
     description:
       "Powerful motorbike suitable for longer distance travel.",
-
 
     features: [
       "More powerful engine",
@@ -145,14 +166,25 @@ export const vehicles = [
       "Suitable for tourists",
     ],
 
-
     requirement:
       "Valid motorcycle driving license required",
 
-
     status: "Available",
 
+    units: [
+      {
+        id: "125-01",
+        status: "Available",
+      },
+      {
+        id: "125-02",
+        status: "Available",
+      },
+      {
+        id: "125-03",
+        status: "Available",
+      },
+    ],
   },
-
 
 ];

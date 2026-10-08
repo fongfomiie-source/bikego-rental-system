@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { BookingProvider } from "./context/BookingContext";
+import Navbar from "./components/Navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,24 +16,34 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "BikeGo Rental",
-  description: "Online bicycle and motorbike rental system",
+  description:
+    "Online bicycle and motorbike rental system",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`
+        ${geistSans.variable}
+        ${geistMono.variable}
+        h-full
+        antialiased
+      `}
     >
       <body>
+        <BookingProvider>
 
-<BookingProvider>
+          <Navbar />
 
-{children}
+          {children}
 
-</BookingProvider>
-
-</body>
+        </BookingProvider>
+      </body>
     </html>
   );
 }

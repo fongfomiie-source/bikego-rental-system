@@ -1,501 +1,606 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useBooking } from "../../context/BookingContext";
 
+export default function ThaiVerification() {
 
-export default function ThaiVerification(){
+  const router = useRouter();
 
+  const {
+    cart,
+    setCustomerType,
+    setDocumentType,
+    setDocumentImage,
+    setDrivingLicenseImage,
+  } = useBooking();
 
-const router = useRouter();
 
+  /* =========================
+     Uploaded National ID
+  ========================= */
 
+  const [file, setFile] =
+    useState<File | null>(null);
 
-const {
+  const [preview, setPreview] =
+    useState("");
 
-cart,
 
-setCustomerType,
+  /* =========================
+     Uploaded Driving License
+  ========================= */
 
-setDocumentType,
+  const [licenseFile, setLicenseFile] =
+    useState<File | null>(null);
 
-setDocumentImage,
+  const [licensePreview, setLicensePreview] =
+    useState("");
 
-setDrivingLicenseImage
 
+  /* =========================
+     Error
+  ========================= */
 
-}=useBooking();
+  const [error, setError] =
+    useState("");
 
 
+  /* =========================
+     Booking Vehicle
+  ========================= */
 
+  const [bookingVehicle, setBookingVehicle] =
+    useState<any>(null);
 
-const hasMotorcycle = cart.some(
-(item)=> 
-item.type === "Motorbike" ||
-item.type === "Motorcycle"
-);
-console.log("VERIFY CART", cart);
-console.log("RAW CART", JSON.stringify(cart));
-console.log("HAS MOTORBIKE", hasMotorcycle);
 
+  /* =========================
+     Load booking selection
+  ========================= */
 
+  useEffect(() => {
 
-const [file,setFile] =
-useState<File | null>(null);
+    const saved =
+      sessionStorage.getItem(
+        "bookingSelection"
+      );
 
 
-const [preview,setPreview] =
-useState("");
+    if (!saved) {
+      return;
+    }
 
 
+    try {
 
-const [licenseFile,setLicenseFile] =
-useState<File | null>(null);
+      const booking =
+        JSON.parse(saved);
 
 
-const [licensePreview,setLicensePreview] =
-useState("");
+      if (booking?.vehicle) {
 
+        setBookingVehicle(
+          booking.vehicle
+        );
+      }
 
+    } catch (error) {
 
-const [error,setError] =
-useState("");
+      console.error(
+        "Failed to read booking selection:",
+        error
+      );
 
+    }
 
+  }, []);
 
 
+  /* =========================
+     Check Motorcycle
+  ========================= */
 
-function handleFile(
-e: React.ChangeEvent<HTMLInputElement>
-){
+  const vehicleRequiresLicense =
+    bookingVehicle?.requireLicense === true;
 
 
-const selected =
-e.target.files?.[0];
+  const cartRequiresLicense =
+    cart.some(
+      (item: any) =>
+        item.requireLicense === true ||
+        item.type === "Motorbike" ||
+        item.type === "Motorcycle"
+    );
 
 
-if(selected){
+  const hasMotorcycle =
+    vehicleRequiresLicense ||
+    cartRequiresLicense;
 
 
-setFile(selected);
+  /* =========================
+     Convert Image To Base64
+  ========================= */
 
+  function convertToBase64(
+    file: File
+  ) {
 
-setPreview(
-URL.createObjectURL(selected)
-);
+    return new Promise<string>(
+      (resolve, reject) => {
 
+        const reader =
+          new FileReader();
 
-setError("");
 
-}
+        reader.readAsDataURL(file);
 
 
-}
+        reader.onload = () => {
 
+          resolve(
+            reader.result as string
+          );
 
+        };
 
 
+        reader.onerror = (error) => {
 
+          reject(error);
 
+        };
 
-function handleLicenseFile(
-e: React.ChangeEvent<HTMLInputElement>
-){
+      }
+    );
+  }
 
 
-const selected =
-e.target.files?.[0];
+  /* =========================
+     National ID Upload
+  ========================= */
 
+  function handleFile(
+    e: React.ChangeEvent<HTMLInputElement>
+  ) {
 
-if(selected){
+    const selected =
+      e.target.files?.[0];
 
 
-setLicenseFile(selected);
+    if (!selected) {
+      return;
+    }
 
 
-setLicensePreview(
-URL.createObjectURL(selected)
-);
+    if (
+      !selected.type.startsWith(
+        "image/"
+      )
+    ) {
 
+      setError(
+        "Please upload an image file."
+      );
 
-setError("");
+      return;
+    }
 
-}
 
+    setFile(selected);
 
-}
 
+    setPreview(
+      URL.createObjectURL(
+        selected
+      )
+    );
 
 
+    setError("");
+  }
 
 
+  /* =========================
+     Driving License Upload
+  ========================= */
 
+  function handleLicenseFile(
+    e: React.ChangeEvent<HTMLInputElement>
+  ) {
 
+    const selected =
+      e.target.files?.[0];
 
-function handleContinue(){
 
+    if (!selected) {
+      return;
+    }
 
 
-if(!file){
+    if (
+      !selected.type.startsWith(
+        "image/"
+      )
+    ) {
 
+      setError(
+        "Please upload an image file."
+      );
 
-setError(
-"Please upload your National ID Card"
-);
+      return;
+    }
 
 
-return;
+    setLicenseFile(
+      selected
+    );
 
-}
 
+    setLicensePreview(
+      URL.createObjectURL(
+        selected
+      )
+    );
 
 
+    setError("");
+  }
 
-if(hasMotorcycle && !licenseFile){
 
+  /* =========================
+     Continue
+  ========================= */
 
-setError(
-"Please upload your Driving License"
-);
+  async function handleContinue() {
 
+    /* National ID required */
 
-return;
+    if (!file) {
 
-}
+      setError(
+        "Please upload your National ID Card"
+      );
 
+      return;
+    }
 
 
+    /* Driving License required
+       for motorcycle */
 
+    if (
+      hasMotorcycle &&
+      !licenseFile
+    ) {
 
+      setError(
+        "Please upload your Driving License"
+      );
 
-setCustomerType(
-"Thai Customer"
-);
+      return;
+    }
 
 
+    try {
 
-setDocumentType(
-"National ID Card"
-);
+      /* Convert National ID */
 
+      const idCardBase64 =
+        await convertToBase64(
+          file
+        );
 
 
-setDocumentImage(
-preview
-);
+      /* Convert Driving License */
 
+      let licenseBase64 = "";
 
 
-setDrivingLicenseImage(
-licensePreview
-);
+      if (licenseFile) {
 
+        licenseBase64 =
+          await convertToBase64(
+            licenseFile
+          );
 
-router.push(
-"/verification/review"
-);
+      }
 
 
+      /* Save Booking Information */
 
-}
+      setCustomerType(
+        "Thai Customer"
+      );
 
 
+      setDocumentType(
+        "National ID Card"
+      );
 
 
+      setDocumentImage(
+        idCardBase64
+      );
 
 
+      setDrivingLicenseImage(
+        licenseBase64
+      );
 
-return (
 
+      /* Go to Review */
 
-<main className="
-min-h-screen
-bg-green-50
-p-8
-">
+      router.push(
+        "/verification/review"
+      );
 
+    } catch (error) {
 
+      console.error(
+        "Verification upload error:",
+        error
+      );
 
-<div className="
-max-w-xl
-mx-auto
-bg-white
-rounded-2xl
-shadow-lg
-p-8
-">
 
+      setError(
+        "Unable to process the uploaded image."
+      );
 
+    }
 
+  }
 
 
-<h1 className="
-text-3xl
-font-bold
-text-green-700
-">
+  /* =========================
+     UI
+  ========================= */
 
-Thai Customer Verification
+  return (
 
-</h1>
+    <main
+      className="
+        min-h-screen
+        bg-green-50
+        p-8
+      "
+    >
 
+      <div
+        className="
+          max-w-xl
+          mx-auto
+          bg-white
+          rounded-2xl
+          shadow-lg
+          p-8
+        "
+      >
 
+        {/* Title */}
 
+        <h1
+          className="
+            text-3xl
+            font-bold
+            text-green-700
+          "
+        >
+          Thai Customer Verification
+        </h1>
 
 
-<p className="
-mt-3
-text-gray-600
-">
+        <p
+          className="
+            mt-3
+            text-gray-600
+          "
+        >
+          Please upload your National ID Card
+        </p>
 
-Please upload your National ID Card
 
-</p>
+        {/* National ID Preview */}
 
+        <div
+          className="
+            mt-6
+            border-2
+            border-dashed
+            rounded-xl
+            p-6
+            text-center
+          "
+        >
 
+          {preview ? (
 
+            <img
+              src={preview}
+              className="
+                mx-auto
+                max-h-60
+                max-w-full
+                object-contain
+                rounded-lg
+              "
+              alt="National ID Preview"
+            />
 
+          ) : (
 
+            <div
+              className="
+                text-gray-400
+              "
+            >
 
+              <div
+                className="
+                  text-4xl
+                "
+              >
+                📷
+              </div>
 
-<div className="
-mt-6
-border-2
-border-dashed
-rounded-xl
-p-6
-text-center
-">
+              <p className="mt-2">
+                National ID Preview
+              </p>
 
+            </div>
 
+          )}
 
-{
+        </div>
 
-preview ?
 
+        {/* National ID Upload */}
 
-<img
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFile}
+          className="
+            mt-6
+            w-full
+            border
+            p-3
+            rounded-lg
+          "
+        />
 
-src={preview}
 
-className="
-mx-auto
-max-h-60
-max-w-full
-object-contain
-rounded-lg
-"
+        {/* Driving License */}
 
-/>
+        {hasMotorcycle && (
 
+          <>
 
-:
+            <p
+              className="
+                mt-8
+                text-gray-600
+              "
+            >
+              Please upload your Driving License
+            </p>
 
-<div className="text-gray-400">
 
-📷
+            {/* License Preview */}
 
-<p>
-National ID Preview
-</p>
+            <div
+              className="
+                mt-4
+                border-2
+                border-dashed
+                rounded-xl
+                p-6
+                text-center
+              "
+            >
 
-</div>
+              {licensePreview ? (
 
+                <img
+                  src={licensePreview}
+                  className="
+                    mx-auto
+                    max-h-60
+                    max-w-full
+                    object-contain
+                    rounded-lg
+                  "
+                  alt="Driving License Preview"
+                />
 
-}
+              ) : (
 
+                <div
+                  className="
+                    text-gray-400
+                  "
+                >
 
+                  <div
+                    className="
+                      text-4xl
+                    "
+                  >
+                    📷
+                  </div>
 
-</div>
+                  <p className="mt-2">
+                    Driving License Preview
+                  </p>
 
+                </div>
 
+              )}
 
+            </div>
 
 
+            {/* License Upload */}
 
-<input
+            <input
+              type="file"
+              accept="image/*"
+              onChange={
+                handleLicenseFile
+              }
+              className="
+                mt-6
+                w-full
+                border
+                p-3
+                rounded-lg
+              "
+            />
 
-type="file"
+          </>
 
-accept="image/*"
+        )}
 
-onChange={handleFile}
 
-className="
-mt-6
-w-full
-border
-p-3
-rounded-lg
-"
+        {/* Error */}
 
-/>
+        {error && (
 
+          <p
+            className="
+              mt-4
+              text-red-500
+              font-medium
+            "
+          >
+            ⚠ {error}
+          </p>
 
+        )}
 
 
+        {/* Continue */}
 
+        <button
+          type="button"
+          onClick={handleContinue}
+          className="
+            mt-8
+            w-full
+            bg-green-600
+            text-white
+            py-4
+            rounded-full
+            hover:bg-green-700
+          "
+        >
+          Continue
+        </button>
 
+      </div>
 
-{
-hasMotorcycle && (
+    </main>
 
-
-<>
-
-
-
-<p className="
-mt-8
-text-gray-600
-">
-
-Please upload your Driving License
-
-</p>
-
-
-
-<div className="
-mt-4
-border-2
-border-dashed
-rounded-xl
-p-6
-text-center
-">
-
-
-{
-
-licensePreview ?
-
-
-<img
-
-src={licensePreview}
-
-className="
-mx-auto
-max-h-60
-max-w-full
-object-contain
-rounded-lg
-"
-
-/>
-
-
-:
-
-<div className="text-gray-400">
-
-📷
-
-<p>
-Driving License Preview
-</p>
-
-</div>
-
-
-}
-
-
-
-</div>
-
-
-
-
-
-
-<input
-
-type="file"
-
-accept="image/*"
-
-onChange={handleLicenseFile}
-
-className="
-mt-6
-w-full
-border
-p-3
-rounded-lg
-"
-
-/>
-
-
-
-</>
-
-
-)
-
-}
-
-
-
-
-
-
-
-
-{
-error &&
-
-<p className="
-mt-4
-text-red-500
-">
-
-⚠ {error}
-
-</p>
-
-}
-
-
-
-
-
-
-
-<button
-
-onClick={handleContinue}
-
-className="
-mt-8
-w-full
-bg-green-600
-text-white
-py-4
-rounded-full
-hover:bg-green-700
-"
-
->
-
-Continue
-
-</button>
-
-
-
-
-
-</div>
-
-
-</main>
-
-
-);
-
-
+  );
 }

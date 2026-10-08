@@ -36,6 +36,24 @@ const [error,setError] = useState("");
 const [orderId,setOrderIdState] = useState("");
 
 
+function convertBase64(file:File){
+
+return new Promise<string>((resolve)=>{
+
+const reader = new FileReader();
+
+reader.onload = ()=>{
+
+resolve(reader.result as string);
+
+};
+
+reader.readAsDataURL(file);
+
+});
+
+}
+
 
 
 
@@ -70,7 +88,40 @@ setOrderIdState(newOrderId);
 setOrderId(newOrderId);
 
 
-setPaymentSlip(slipPreview);
+function handleContinue(){
+
+
+if(!slipPreview){
+
+
+setError(
+"Please upload payment slip"
+);
+
+
+return;
+
+
+}
+
+
+
+const newOrderId =
+"BG-" + Date.now();
+
+
+
+setOrderIdState(newOrderId);
+
+
+setOrderId(newOrderId);
+
+
+
+router.push("/verification");
+
+
+}
 
 
 
@@ -491,20 +542,27 @@ type="file"
 
 accept="image/*"
 
-onChange={(e)=>{
+onChange={async (e)=>{
 
 
 const file =
 e.target.files?.[0];
 
 
-
 if(file){
 
 
-setSlipPreview(
-URL.createObjectURL(file)
-);
+const base64 =
+await convertBase64(file);
+
+
+
+setSlipPreview(base64);
+
+
+
+setPaymentSlip(base64);
+
 
 
 setError("");

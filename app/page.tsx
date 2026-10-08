@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-green-50 flex items-center justify-center">
@@ -12,24 +13,41 @@ export default function Home() {
           Explore the city by bicycle
         </p>
 
-<Link
+        {/* Rent Now */}
+        <Link
+          href="/bikes"
+          className="
+            bg-green-600
+            text-white
+            px-8
+            py-3
+            rounded-full
+            inline-block
+            w-full
+            max-w-xs
+          "
+        >
+          Rent Now
+        </Link>
 
-href="/bikes"
-
-className="
-bg-green-600
-text-white
-px-8
-py-3
-rounded-full
-inline-block
-"
-
->
-
-Rent Now
-
-</Link>
+        {/* My Booking */}
+        <Link
+          href="/booking/my"
+          className="
+            mt-4
+            border
+            border-green-600
+            text-green-700
+            px-8
+            py-3
+            rounded-full
+            inline-block
+            w-full
+            max-w-xs
+          "
+        >
+          My Booking
+        </Link>
 
       </div>
     </main>
