@@ -2,18 +2,16 @@
 
 import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
-import { useSearchParams } from "next/navigation";
 
 export default function PendingPage() {
-  const searchParams = useSearchParams();
-
   const [booking, setBooking] = useState<any>(null);
   const [bookingId, setBookingId] = useState("");
   const [searchError, setSearchError] = useState("");
 
-  /*
-   * Find booking by Booking ID
-   */
+  /* =========================
+     Find booking by Booking ID
+  ========================= */
+
   function findBookingById(searchId: string) {
     const data = localStorage.getItem("bookings");
 
@@ -48,9 +46,10 @@ export default function PendingPage() {
     }
   }
 
-  /*
-   * Load booking
-   */
+  /* =========================
+     Load booking
+  ========================= */
+
   function loadBooking(searchId?: string) {
     const idToLoad = (
       searchId ??
@@ -95,9 +94,10 @@ export default function PendingPage() {
     );
   }
 
-  /*
-   * Search booking manually
-   */
+  /* =========================
+     Search booking manually
+  ========================= */
+
   function handleSearch(
     event: FormEvent
   ) {
@@ -106,20 +106,34 @@ export default function PendingPage() {
     loadBooking();
   }
 
-  /*
-   * Initial load
-   *
-   * Priority:
-   *
-   * 1. Booking ID from URL
-   * 2. lastViewedBookingId
-   *
-   * This prevents an old booking from
-   * replacing a newly created booking.
-   */
+  /* =========================
+     Initial load
+     
+     Priority:
+     1. Booking ID from URL
+     2. lastViewedBookingId
+     
+     This prevents an old booking from
+     replacing a newly created booking.
+  ========================= */
+
   useEffect(() => {
+    /*
+     * Read Booking ID from URL
+     *
+     * Example:
+     * /booking/pending?id=BG-12345678
+     *
+     * We intentionally read window.location
+     * inside useEffect so that Next.js can
+     * build/prerender this page successfully.
+     */
+    const urlParams = new URLSearchParams(
+      window.location.search
+    );
+
     const urlBookingId =
-      searchParams.get("id") || "";
+      urlParams.get("id") || "";
 
     if (urlBookingId) {
       setBookingId(urlBookingId);
@@ -127,6 +141,10 @@ export default function PendingPage() {
       return;
     }
 
+    /*
+     * If there is no Booking ID in URL,
+     * use the last viewed booking.
+     */
     const lastViewedId =
       localStorage.getItem(
         "lastViewedBookingId"
@@ -136,11 +154,12 @@ export default function PendingPage() {
       setBookingId(lastViewedId);
       loadBooking(lastViewedId);
     }
-  }, [searchParams]);
+  }, []);
 
-  /*
-   * Return vehicle
-   */
+  /* =========================
+     Return vehicle
+  ========================= */
+
   function returnVehicle(
     unitId: string
   ) {
@@ -199,8 +218,8 @@ export default function PendingPage() {
           : Array.isArray(
               currentBooking.unlockCodes
             )
-            ? currentBooking.unlockCodes
-            : [];
+          ? currentBooking.unlockCodes
+          : [];
 
       const allReturned =
         assignedUnits.length > 0 &&
@@ -264,9 +283,10 @@ export default function PendingPage() {
     }
   }
 
-  /*
-   * Booking status
-   */
+  /* =========================
+     Booking status
+  ========================= */
+
   const isPending =
     booking?.status ===
     "Pending Verification";
@@ -283,9 +303,10 @@ export default function PendingPage() {
     booking?.status ===
     "Rejected";
 
-  /*
-   * Returned vehicles
-   */
+  /* =========================
+     Returned vehicles
+  ========================= */
+
   const returnedUnits =
     Array.isArray(
       booking?.returnedUnits
@@ -293,9 +314,10 @@ export default function PendingPage() {
       ? booking.returnedUnits
       : [];
 
-  /*
-   * Assigned vehicles
-   */
+  /* =========================
+     Assigned vehicles
+  ========================= */
+
   const assignedUnits =
     Array.isArray(
       booking?.assignedUnits
@@ -304,12 +326,13 @@ export default function PendingPage() {
       : Array.isArray(
           booking?.unlockCodes
         )
-        ? booking.unlockCodes
-        : [];
+      ? booking.unlockCodes
+      : [];
 
-  /*
-   * Unlock codes
-   */
+  /* =========================
+     Unlock codes
+  ========================= */
+
   const unlockCodes =
     Array.isArray(
       booking?.unlockCodes
@@ -317,9 +340,10 @@ export default function PendingPage() {
       ? booking.unlockCodes
       : [];
 
-  /*
-   * Rental period text
-   */
+  /* =========================
+     Rental period text
+  ========================= */
+
   function getPeriodText(
     period: string
   ) {
@@ -413,14 +437,12 @@ export default function PendingPage() {
 
         </div>
 
-
         {!booking &&
           !searchError && (
             <div className="bg-gray-50 rounded-xl p-5 text-center text-gray-600">
               Please enter your Booking ID above to view your booking.
             </div>
           )}
-
 
         {booking && (
           <>
@@ -447,25 +469,26 @@ export default function PendingPage() {
                     isApproved
                       ? "ml-2 text-green-600 font-bold"
                       : isReturned
-                        ? "ml-2 text-blue-600 font-bold"
-                        : isRejected
-                          ? "ml-2 text-red-600 font-bold"
-                          : "ml-2 text-yellow-600 font-bold"
+                      ? "ml-2 text-blue-600 font-bold"
+                      : isRejected
+                      ? "ml-2 text-red-600 font-bold"
+                      : "ml-2 text-yellow-600 font-bold"
                   }
                 >
+
                   {isApproved
                     ? "🟢 Approved"
                     : isReturned
-                      ? "🔵 Returned"
-                      : isRejected
-                        ? "🔴 Rejected"
-                        : "🟡 Pending Verification"}
+                    ? "🔵 Returned"
+                    : isRejected
+                    ? "🔴 Rejected"
+                    : "🟡 Pending Verification"}
+
                 </span>
 
               </p>
 
             </div>
-
 
             {/* =========================
                 BOOKING DETAIL
@@ -515,7 +538,6 @@ export default function PendingPage() {
               </div>
 
             </div>
-
 
             {/* =========================
                 APPROVED / ASSIGNED VEHICLES
@@ -638,7 +660,6 @@ export default function PendingPage() {
                 </div>
               )}
 
-
             {/* =========================
                 FULL RETURNED
             ========================= */}
@@ -681,7 +702,6 @@ export default function PendingPage() {
               </div>
             )}
 
-
             {/* =========================
                 PENDING
             ========================= */}
@@ -704,7 +724,6 @@ export default function PendingPage() {
               </div>
             )}
 
-
             {/* =========================
                 REJECTED
             ========================= */}
@@ -724,7 +743,6 @@ export default function PendingPage() {
               </div>
             )}
 
-
             {/* =========================
                 REFRESH
             ========================= */}
@@ -743,7 +761,6 @@ export default function PendingPage() {
 
           </>
         )}
-
 
         <Link
           href="/"
